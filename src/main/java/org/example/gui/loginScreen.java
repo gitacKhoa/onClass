@@ -89,6 +89,7 @@ public class loginScreen extends JFrame {
                         statusLabelAlignment(statusLabel, controlPanel);
                         javax.swing.Timer timer = new javax.swing.Timer(1000, ee -> {
                             dispose(); // đóng login
+                            mainFrame a = new mainFrame();
                             //them cua so chinh o day
                         });
                         timer.setRepeats(false);
