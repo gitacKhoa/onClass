@@ -4,15 +4,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.GregorianCalendar;
 
-public class notificationScreen extends JFrame {
+import static org.example.gui.RegisterScreen.registerStatus;
+
+public class notificationScreen extends JDialog {
     JLabel notification;
     JButton OkButton;
+    boolean notiClicked;
 
-    public notificationScreen(String s) {
+    public notificationScreen(String s, String action) {
+        setModal(true);
         setLocationRelativeTo(null);
-        setSize(400, 200); // chỉnh lại size
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(400, 200); // chỉnh lại size;
 
         // Label hiển thị thông báo
         notification = new JLabel(s);
@@ -21,9 +25,11 @@ public class notificationScreen extends JFrame {
 
         // Nút OK
         OkButton = new JButton("OK");
+
         OkButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                notiClicked = true;
                 dispose();
             }
         });
@@ -36,10 +42,10 @@ public class notificationScreen extends JFrame {
         add(notification, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
 
-        this.setVisible(true);
+        setVisible(true);
     }
 
     public static void main(String[] args) {
-        new notificationScreen("Thông báo đã lưu thành công!");
+        new notificationScreen("Thông báo đã lưu thành công!", "register");
     }
 }

@@ -1,10 +1,13 @@
 package org.example.gui;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import org.example.dao.UserDAO;
+import org.example.gui.admingui.mainFrame;
+import org.example.util.userSession;
+
+import static org.example.dao.UserDAO.getUserID;
+import static org.example.dao.UserDAO.getUserRole;
 
 public class loginScreen extends JFrame {
     JButton DangNhap ;
@@ -14,6 +17,7 @@ public class loginScreen extends JFrame {
     JPasswordField txtPassword;
     JPanel controlPanel;
     JLabel statusLabel;
+    JButton registerButton;
     public loginScreen () {
         setSize(400, 250);
         setTitle("Dang Nhap");
@@ -29,7 +33,15 @@ public class loginScreen extends JFrame {
         DangNhap = new JButton();
         controlPanel.add(DangNhap);
         DangNhap.setText("Đăng nhập");
-        DangNhap.setBounds(140, 130, 100, 35);
+        DangNhap.setBounds(75, 130, 100, 35);
+
+        registerButton = new JButton("Đăng kí");
+        registerButton.setBounds(210,130, 100, 35);
+        controlPanel.add(registerButton);
+        registerButton.addActionListener(e-> {
+            dispose();
+            RegisterScreen dangki = new RegisterScreen();
+        });
 
         UsernameLabel = new JLabel();
         controlPanel.add(UsernameLabel);
@@ -61,7 +73,6 @@ public class loginScreen extends JFrame {
 
 
 
-        DangNhap.setActionCommand("dangnhap");
         DangNhap.addActionListener(new ButtonClickListener());
 
         controlPanel.setVisible(true);
@@ -79,18 +90,16 @@ public class loginScreen extends JFrame {
 
     private class ButtonClickListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            String command = e.getActionCommand();
-            if (command.equals("dangnhap"))  {
                 String username = txtUsername.getText();
                 String password =new String(txtPassword.getPassword());
                 if (!password.equals("") && !username.equals("")) {
                     if (UserDAO.checkUsername(username).equals(password)) {
                         statusLabel.setText("Đăng nhập thành công!");
                         statusLabelAlignment(statusLabel, controlPanel);
+                        userSession.createSession(username, getUserRole(username),getUserID(username));
                         javax.swing.Timer timer = new javax.swing.Timer(1000, ee -> {
-                            dispose(); // đóng login
+                            dispose(); // đóng login va tạo cửa sổ mới
                             mainFrame a = new mainFrame();
-                            //them cua so chinh o day
                         });
                         timer.setRepeats(false);
                         timer.start();
@@ -104,7 +113,7 @@ public class loginScreen extends JFrame {
                     statusLabel.setText("Bạn cần nhập đầy đủ Username và Password!");
                     statusLabelAlignment(statusLabel, controlPanel);
                 }
-            }
+
         }
     }
 
