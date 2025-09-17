@@ -2,6 +2,7 @@ package org.example.gui.admingui;
 
 import org.example.dao.UserDAO;
 import org.example.gui.netManagerFrame;
+import org.example.model.User;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,9 +20,9 @@ public class userAccountManager {
     private JPanel danhSachPanel;
     private JPanel chucNangPanel;
     private JButton xemChiTiet;
-
+    private JButton refresh;
     public void init (mainFrame mainFrame) {
-
+        refresh = new JButton("Refresh");
         thanhTim = new JTextField();
         xemChiTiet = new JButton("Xem chi tiết");
         nutTim = new JButton("Tìm kiếm");
@@ -67,16 +68,20 @@ public class userAccountManager {
 
         chucNangPanel.setVisible(true);
 
+        danhSachPanel.add(refresh);
         danhSachPanel.add(thanhTim);
         danhSachPanel.add(nutTim);
         danhSachPanel.add(danhSach);
         danhSachPanel.add(danhSachLabel);
 
+        refresh.setBounds(486,57,94,28);
         thanhTim.setBounds(14,21,466,28);
         nutTim.setBounds(486,21,94,28);
         danhSach.setBounds(14,90,566,472);
         danhSachLabel.setBounds(16,57,400,24);
         danhSachPanel.setVisible(true);
+
+
 
         //
         //    SỰ KIỆN CHO NÚT TÌM KIẾM:
@@ -106,6 +111,14 @@ public class userAccountManager {
             } else {
                 JOptionPane.showMessageDialog(mainFrame, "Không tìm thấy tài khoản nào!");
             }
+        });
+        //
+        //SỰ KIỆN NÚT REFRESH
+        //
+        refresh.addActionListener(e->{
+            DefaultListModel <String> refresh = new DefaultListModel<>();
+            UserDAO.getAllUsername(refresh);
+            danhSach.setModel(refresh);
         });
 
         //
@@ -137,7 +150,12 @@ public class userAccountManager {
         //
 
         nutXoa.addActionListener(e->{
-            String rmvUsername = danhSach.getSelectedValue();
+
+            if (JOptionPane.showConfirmDialog(mainFrame,"Bạn có chắc muốn xóa?","Xác nhận", JOptionPane.YES_NO_OPTION)== JOptionPane.YES_OPTION) {
+                String rmvUsername = danhSach.getSelectedValue();
+                UserDAO.deleteUserAccount(rmvUsername);
+            }
+
         });
 
         //

@@ -102,7 +102,7 @@ public class UserDAO {
         try {
             //thuc thi ket noi
             Connection conn = DatabaseConnection.getConnection();
-            String sql = "INSERT INTO users (username, password_hash, user_role) VALUES (?, ?);";
+            String sql = "INSERT INTO users (username, password_hash) VALUES (?, ?);";
             PreparedStatement stm = conn.prepareStatement(sql);
             stm.setString(1,username);
             stm.setString(2, password);
@@ -118,6 +118,19 @@ public class UserDAO {
         }
         return false;
     }
+    public static void deleteUserAccount (String username) {
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            String sql = "DELETE FROM users\n" +
+                         "WHERE username = ?;\n";
 
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, username);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
 }

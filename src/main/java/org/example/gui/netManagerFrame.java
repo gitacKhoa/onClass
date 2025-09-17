@@ -11,7 +11,7 @@ public class netManagerFrame extends JFrame {
         getContentPane().setPreferredSize(new Dimension(width, height));
         pack();
         setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         setLocationRelativeTo(null);
     }
 }
