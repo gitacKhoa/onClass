@@ -30,7 +30,7 @@ public class createUserAccount extends netManagerFrame {
     public createUserAccount (String title) {
 
         super(title, 700, 420);
-        usernameTxt = new JTextField();
+        usernameTxt = new PlaceholderTextField("Username");
         passTxt = new JPasswordField();
         cfpassTxt = new JPasswordField();
         createBtn = new JButton("Tạo");

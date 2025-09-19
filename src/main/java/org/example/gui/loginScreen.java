@@ -2,6 +2,8 @@ package org.example.gui;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+
 import org.example.dao.UserDAO;
 import org.example.gui.admingui.mainFrame;
 import org.example.util.userSession;
@@ -97,9 +99,14 @@ public class loginScreen extends JFrame {
                         statusLabel.setText("Đăng nhập thành công!");
                         statusLabelAlignment(statusLabel, controlPanel);
                         userSession.createSession(username, getUserRole(username),getUserID(username));
-                        javax.swing.Timer timer = new javax.swing.Timer(1000, ee -> {
-                            dispose(); // đóng login va tạo cửa sổ mới
-                            mainFrame a = new mainFrame();
+                        userSession.timerStart();
+
+                        javax.swing.Timer timer = new javax.swing.Timer(500, ee -> {
+                            dispose();
+                            if (userSession.getSession().getRole().equals("admin")) {
+                                mainFrame y = new mainFrame();
+                                y.mainFrameInit(y);
+                            }
                         });
                         timer.setRepeats(false);
                         timer.start();
@@ -113,7 +120,6 @@ public class loginScreen extends JFrame {
                     statusLabel.setText("Bạn cần nhập đầy đủ Username và Password!");
                     statusLabelAlignment(statusLabel, controlPanel);
                 }
-
         }
     }
 

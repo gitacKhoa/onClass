@@ -13,7 +13,7 @@ public class userAccountManager {
     private JButton nutTao;
     private JButton nutXoa;
     private JButton napTien;
-    private JList <String> danhSach;
+    public static JList <String> danhSach;
     DefaultListModel <String> modelDanhSach;
     private JLabel danhSachLabel;
     private JLabel chucNangLabel;
@@ -21,6 +21,7 @@ public class userAccountManager {
     private JPanel chucNangPanel;
     private JButton xemChiTiet;
     private JButton refresh;
+    private JButton back;
     public void init (mainFrame mainFrame) {
         refresh = new JButton("Refresh");
         thanhTim = new JTextField();
@@ -29,6 +30,7 @@ public class userAccountManager {
         nutTao = new JButton("Tạo tài khoản khách");
         napTien = new JButton("Nạp tiền");
         nutXoa = new JButton("Xóa");
+        back = new JButton("Trở lại");
         modelDanhSach = new DefaultListModel<>();
         UserDAO.getAllUsername(modelDanhSach);
 
@@ -53,6 +55,7 @@ public class userAccountManager {
         chucNangPanel.add(nutXoa);
         chucNangPanel.add(napTien);
         chucNangPanel.add(chucNangLabel);
+        chucNangPanel.add(back);
 
         napTien.setEnabled(false);
         nutXoa.setEnabled(false);
@@ -63,7 +66,7 @@ public class userAccountManager {
         napTien.setBounds(46,336,284,76);
         xemChiTiet.setBounds(46,435, 284,76);
         chucNangLabel.setBounds(80,49,215,48);
-
+        back.setBounds(213,530,117,32);
         chucNangLabel.setFont(new Font("Ariel", Font.BOLD, 40));
 
         chucNangPanel.setVisible(true);
@@ -162,11 +165,38 @@ public class userAccountManager {
         //SỰ KIỆN NÚT NẠP TIỀN
         //
 
+        napTien.addActionListener( e-> {
+            new rechargeMoney("Nạp tiền cho khách", 700, 420);
+        });
+
         //
         //SỰ KIỆN NÚT XEM CHI TIẾT
         //
 
+        xemChiTiet.addActionListener(e->{
+            new detail("Chi tiết người dùng", 700, 420, danhSach.getSelectedValue());
+        });
+
+        //
+        // Sự kiện nút back
+        //
+
+        back.addActionListener(e-> {
+            eraseFrame(mainFrame);
+            mainFrame.mainFrameInit(mainFrame);
+            mainFrame.revalidate();
+            mainFrame.repaint();
+        });
+
         mainFrame.revalidate();
         mainFrame.repaint();
+    }
+    //
+    // hàm xóa frame
+    //
+    public void eraseFrame (mainFrame mainframe) {
+        mainframe.getContentPane().removeAll();
+        mainframe.revalidate();
+        mainframe.repaint();
     }
 }
