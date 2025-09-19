@@ -121,6 +121,7 @@ public class userAccountManager {
         refresh.addActionListener(e->{
             DefaultListModel <String> refresh = new DefaultListModel<>();
             UserDAO.getAllUsername(refresh);
+            modelDanhSach = refresh;
             danhSach.setModel(refresh);
         });
 
