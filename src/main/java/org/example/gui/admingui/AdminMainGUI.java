@@ -6,16 +6,18 @@ import java.awt.event.WindowEvent;
 
 
 import org.example.dao.UserDAO;
-import org.example.util.userSession;
+import org.example.gui.LoginGUI;
+import org.example.util.UserSession;
 
-import static org.example.util.userSession.getSession;
+import static org.example.util.UserSession.getSession;
 
 
-public class mainFrame extends JFrame {
+public class AdminMainGUI extends JFrame {
     JButton btn1;
     JButton btn2;
     JButton btn3;
     JButton btn4;
+    JButton signOut;
 
     JPanel buttonPanel;
     JPanel headerPanel;
@@ -24,7 +26,7 @@ public class mainFrame extends JFrame {
     JLabel name;
 
     String titleName;
-    public void mainFrameInit(mainFrame mainFrame) {
+    public void mainFrameInit(AdminMainGUI mainFrame) {
         mainFrame.setTitle("NetControl");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.getContentPane().setPreferredSize(new Dimension(1000, 600));
@@ -34,7 +36,7 @@ public class mainFrame extends JFrame {
         mainFrame.setResizable(false);
 
 
-        titleName= getSession().getUsername();
+        titleName= getSession().getUser().getUsername();
         headerPanel = new JPanel();
         headerPanel.setVisible(true);
         headerPanel.setLayout(null);
@@ -55,7 +57,7 @@ public class mainFrame extends JFrame {
 
         buttonPanel = new JPanel();
         buttonPanel.setBounds(29,164, 944, 407); // panel nằm trong frame
-        buttonPanel.setBorder(BorderFactory.createTitledBorder("Quản lí quán Net"));
+        buttonPanel.setBorder(BorderFactory.createTitledBorder("Dịch vụ quán net"));
         buttonPanel.setLayout(null);
 
         mainFrame.add(buttonPanel);
@@ -68,21 +70,24 @@ public class mainFrame extends JFrame {
         btn2.setFont(new Font("ProductSans", Font.BOLD, 25));
         btn3 = new JButton("Chat");
         btn3.setFont(new Font("ProductSans", Font.BOLD, 25));
-        btn4 = new JButton("Quản lí máy");
+        btn4 = new JButton("Thống kê");
         btn4.setFont(new Font("ProductSans", Font.BOLD, 25));
+        signOut = new JButton("Đăng xuất");
         btn1.setBounds(19,50, 443,144);
         btn2.setBounds(482, 50, 443,144);
         btn3.setBounds(19, 214, 443,144);
         btn4.setBounds(482, 214, 443,144);
+        signOut.setBounds(810,366,115,32);
 
         buttonPanel.add(btn1);
         buttonPanel.add(btn2);
         buttonPanel.add(btn3);
         buttonPanel.add(btn4);
+        buttonPanel.add(signOut);
 
         btn1.addActionListener(e -> {
             eraseFrame();
-            userAccountManager mngframe= new userAccountManager();
+            UserAccountManagerGUI mngframe= new UserAccountManagerGUI();
             mngframe.init(this);
         });
         btn2.addActionListener(e -> {
@@ -95,21 +100,30 @@ public class mainFrame extends JFrame {
             eraseFrame();
         });
 
-        // can chinh bo cuc
+        signOut.addActionListener(e -> {
+            UserSession.timerEnd();
+            UserSession.getSession().clearSession();
+            dispose();
+            new LoginGUI().setVisible(true);
+        });
+
+
         mainFrame.setVisible(true);
+
+
         mainFrame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                userSession.timerEnd();
-                System.out.println("chuong trinh ket thuc");
-                userSession.sessionTime();
+                UserSession.timerEnd();
+                UserSession.sessionTime();
+                UserSession.getSession().clearSession();
                 UserDAO.useTime(titleName);
             }
         });
     }
 
         public static void main(String[] args) {
-            new mainFrame();
+            new AdminMainGUI();
         }
         public void eraseFrame () {
             this.getContentPane().removeAll();

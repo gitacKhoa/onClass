@@ -1,13 +1,11 @@
 package org.example.gui.admingui;
 
 import org.example.dao.UserDAO;
-import org.example.gui.netManagerFrame;
-import org.example.model.User;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class userAccountManager {
+public class UserAccountManagerGUI {
     private JTextField thanhTim;
     private JButton nutTim;
     private JButton nutTao;
@@ -22,7 +20,7 @@ public class userAccountManager {
     private JButton xemChiTiet;
     private JButton refresh;
     private JButton back;
-    public void init (mainFrame mainFrame) {
+    public void init (AdminMainGUI mainFrame) {
         refresh = new JButton("Refresh");
         thanhTim = new JTextField();
         xemChiTiet = new JButton("Xem chi tiết");
@@ -146,7 +144,7 @@ public class userAccountManager {
         // SỰ KIỆN NÚT TẠO TÀI KHOẢN
         //
         nutTao.addActionListener(e->{
-            new createUserAccount("Tạo tài khoản khách");
+            new CreateUserAccountGUI("Tạo tài khoản khách");
         });
 
         //
@@ -167,7 +165,7 @@ public class userAccountManager {
         //
 
         napTien.addActionListener( e-> {
-            new rechargeMoney("Nạp tiền cho khách", 700, 420);
+            new RechargeMoneyGUI("Nạp tiền cho khách", 700, 420);
         });
 
         //
@@ -175,7 +173,7 @@ public class userAccountManager {
         //
 
         xemChiTiet.addActionListener(e->{
-            new detail("Chi tiết người dùng", 700, 420, danhSach.getSelectedValue());
+            new UserAccountDetailGUI("Chi tiết người dùng", 700, 420, danhSach.getSelectedValue());
         });
 
         //
@@ -195,7 +193,7 @@ public class userAccountManager {
     //
     // hàm xóa frame
     //
-    public void eraseFrame (mainFrame mainframe) {
+    public void eraseFrame (AdminMainGUI mainframe) {
         mainframe.getContentPane().removeAll();
         mainframe.revalidate();
         mainframe.repaint();

@@ -1,9 +1,10 @@
 package org.example.dao;
 
 
-import org.example.gui.admingui.rechargeMoney;
+import org.example.gui.admingui.RechargeMoneyGUI;
+import org.example.model.User;
 import org.example.util.DatabaseConnection;
-import org.example.util.userSession;
+import org.example.util.UserSession;
 
 import javax.swing.*;
 import java.sql.*;
@@ -154,7 +155,7 @@ public class UserDAO {
     //
     //NẠP TIỀN CHO KHÁCH
     //
-    public static void chargeMoney (rechargeMoney rc, int chargeAmount, String username) {
+    public static void chargeMoney (RechargeMoneyGUI rc, int chargeAmount, String username) {
         try (Connection conn = DatabaseConnection.getConnection();){
 
             String sql = "UPDATE users\n" +
@@ -184,7 +185,7 @@ public class UserDAO {
                          "WHERE username = ?;";
 
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setLong(1, userSession.sessionTime());
+            stmt.setLong(1, UserSession.sessionTime());
             stmt.setString(2, username);
             stmt.executeUpdate();
 
@@ -234,6 +235,30 @@ public class UserDAO {
 
         }
         return 0;
+    }
+    //
+    //Gán tất cả thông tin cho user
+    //
+    public static void setUser (String username, User user) {
+        try ( Connection conn = DatabaseConnection.getConnection()) {
+            String sql= "SELECT *\n" +
+                    "FROM users\n" +
+                    "WHERE BINARY username = ?;";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            user.setUserID(rs.getString("user_id"));
+            user.setUsername(rs.getString("username"));
+            user.setUserRole(rs.getString("user_role"));
+            user.setBalance(rs.getLong("balance"));
+            user.setUseTime(rs.getLong("usetime"));
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+
+        }
     }
 
     //

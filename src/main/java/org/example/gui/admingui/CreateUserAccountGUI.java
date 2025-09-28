@@ -1,25 +1,15 @@
 package org.example.gui.admingui;
 
 import org.example.dao.UserDAO;
-import org.example.gui.loginScreen;
-import org.example.gui.netManagerFrame;
+import org.example.gui.NetManagerGUI;
 
-import org.example.gui.notificationScreen;
-import org.example.util.DatabaseConnection;
+import org.example.gui.notificationGUI;
+import org.example.util.PlaceholderTextField;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import org.example.dao.Get;
 
-import static org.example.dao.UserDAO.createAccount;
-
-public class createUserAccount extends netManagerFrame {
+public class CreateUserAccountGUI extends NetManagerGUI {
     JTextField usernameTxt;
     JPasswordField passTxt;
     JPasswordField cfpassTxt;
@@ -27,7 +17,7 @@ public class createUserAccount extends netManagerFrame {
     JButton cancelBtn;
     JLabel frameTitle;
     JPanel panel;
-    public createUserAccount (String title) {
+    public CreateUserAccountGUI(String title) {
 
         super(title, 700, 420);
         usernameTxt = new PlaceholderTextField("Username");
@@ -69,19 +59,19 @@ public class createUserAccount extends netManagerFrame {
 
                     if (password.equals(confirmPassword)) {
                         if (UserDAO.createUserAccount(usernameTxt.getText(), password)) {
-                            notificationScreen notification = new notificationScreen("Đăng kí thành công!", "register");
+                            notificationGUI notification = new notificationGUI("Đăng kí thành công!", "register");
                         }
                         else {
-                        notificationScreen noti = new notificationScreen("Tài khoản đã tồn tại!", "register");
+                        notificationGUI noti = new notificationGUI("Tài khoản đã tồn tại!", "register");
                         }
                     }
                     else {
-                        notificationScreen noti = new notificationScreen("Password phải trùng với Confirm Password!", "register");
+                        notificationGUI noti = new notificationGUI("Password phải trùng với Confirm Password!", "register");
 
                     }
                 }
                 else {
-                    notificationScreen noti = new notificationScreen("Bạn cần nhập đầy đủ thông tin!", "register");
+                    notificationGUI noti = new notificationGUI("Bạn cần nhập đầy đủ thông tin!", "register");
 
                 }
             });

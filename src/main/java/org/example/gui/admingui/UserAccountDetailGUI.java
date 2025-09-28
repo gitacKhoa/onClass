@@ -1,19 +1,19 @@
 package org.example.gui.admingui;
 
 import org.example.dao.UserDAO;
-import org.example.gui.netManagerFrame;
+import org.example.gui.NetManagerGUI;
 
 import javax.swing.*;
 import java.awt.*;
 
 import static org.example.dao.UserDAO.*;
 
-public class detail extends netManagerFrame {
+public class UserAccountDetailGUI extends NetManagerGUI {
     JLabel frametitle, usernameLabel, ID, role, balance, timeuse, orders;
     JPanel panel;
     Font plain;
     Font bold;
-    public detail (String title, int width, int height, String username) {
+    public UserAccountDetailGUI(String title, int width, int height, String username) {
         super(title, width, height);
         plain = new Font("Arial", Font.PLAIN, 24);
         bold = new Font("Arial", Font.BOLD, 40);

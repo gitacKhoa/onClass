@@ -4,16 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.GregorianCalendar;
 
-import static org.example.gui.RegisterScreen.registerStatus;
-
-public class notificationScreen extends JDialog {
+public class notificationGUI extends JDialog {
     JLabel notification;
     JButton OkButton;
     boolean notiClicked;
 
-    public notificationScreen(String s, String action) {
+    public notificationGUI(String s, String action) {
         setModal(true);
         setLocationRelativeTo(null);
         setSize(400, 200); // chỉnh lại size;
@@ -46,6 +43,6 @@ public class notificationScreen extends JDialog {
     }
 
     public static void main(String[] args) {
-        new notificationScreen("Thông báo đã lưu thành công!", "register");
+        new notificationGUI("Thông báo đã lưu thành công!", "register");
     }
 }

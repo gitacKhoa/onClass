@@ -1,4 +1,4 @@
-package org.example.gui.admingui;
+package org.example.util;
 
 import java.awt.*;
 import javax.swing.*;

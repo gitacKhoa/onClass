@@ -1,11 +1,11 @@
 package org.example;
 
-import org.example.gui.loginScreen;
+import org.example.gui.LoginGUI;
 
 
 public class Main {
     public static void main(String[] args) {
-        loginScreen newFrame = new loginScreen();
+        LoginGUI newFrame = new LoginGUI();
         newFrame.setVisible(true);
     }
 }

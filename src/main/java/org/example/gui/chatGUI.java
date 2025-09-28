@@ -2,14 +2,13 @@
 package org.example.gui;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 
-public class chatFrame extends JFrame {
+public class chatGUI extends JFrame {
     private JTextArea chatArea;
     private JTextField inputField;
     private JButton sendButton;
 
-    public chatFrame() {
+    public chatGUI() {
         setTitle("Chat App");
         setSize(400, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,6 +43,6 @@ public class chatFrame extends JFrame {
     }
 
     public static void main(String[] args) {
-        new chatFrame();
+        new chatGUI();
     }
 }

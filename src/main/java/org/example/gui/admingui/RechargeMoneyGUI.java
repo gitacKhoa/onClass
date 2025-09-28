@@ -1,12 +1,12 @@
 package org.example.gui.admingui;
 
 import org.example.dao.UserDAO;
-import org.example.gui.netManagerFrame;
+import org.example.gui.NetManagerGUI;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class rechargeMoney extends netManagerFrame {
+public class RechargeMoneyGUI extends NetManagerGUI {
 
     JPanel panel;                       //  BẢNG CHỨA TẤT CẢ THÀNH PHẦN
     JLabel mainTitle;                   //  HIỆN CHỮ
@@ -15,12 +15,12 @@ public class rechargeMoney extends netManagerFrame {
     JButton chargeBtn;                  //  NÚT NẠP
     JButton cancelBtn;                  //  NÚT HỦY
     String username;
-    public rechargeMoney(String title, int width, int height) {
+    public RechargeMoneyGUI(String title, int width, int height) {
         super(title, width, height);
         //
         //TẠO CÁC PHẦN TỬ
         //
-        username = userAccountManager.danhSach.getSelectedValue();
+        username = UserAccountManagerGUI.danhSach.getSelectedValue();
         panel = new JPanel();
         mainTitle = new JLabel("Nạp tiền");
         usernameInf = new JLabel("Tên tài khoản: " + username);
@@ -73,6 +73,6 @@ public class rechargeMoney extends netManagerFrame {
     }
 
     public static void main(String[] args) {
-        new rechargeMoney("xinchao",700,420);
+        new RechargeMoneyGUI("xinchao",700,420);
     }
 }
