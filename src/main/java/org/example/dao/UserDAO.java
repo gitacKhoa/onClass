@@ -177,7 +177,7 @@ public class UserDAO {
     // TÍNH TỔNG GIỜ SỬ DỤNG TRONG CÁC PHIÊN ĐĂNG NHẬP
     //
 
-    public static void useTime (String username) {
+    public static void addUseTime (String username) {
         try (Connection conn = DatabaseConnection.getConnection();){
 
             String sql = "UPDATE users\n" +

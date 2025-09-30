@@ -102,7 +102,9 @@ public class AdminMainGUI extends JFrame {
 
         signOut.addActionListener(e -> {
             UserSession.timerEnd();
+            UserDAO.addUseTime(UserSession.getSession().getUser().getUsername());
             UserSession.getSession().clearSession();
+
             dispose();
             new LoginGUI().setVisible(true);
         });
@@ -116,8 +118,9 @@ public class AdminMainGUI extends JFrame {
             public void windowClosing(WindowEvent e) {
                 UserSession.timerEnd();
                 UserSession.sessionTime();
+                UserDAO.addUseTime(UserSession.getSession().getUser().getUsername());
                 UserSession.getSession().clearSession();
-                UserDAO.useTime(titleName);
+
             }
         });
     }
