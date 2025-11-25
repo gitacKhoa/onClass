@@ -6,8 +6,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import org.example.dao.UserDAO;
+import org.example.model.User;
 
-import static org.example.dao.UserDAO.createAccount;
 
 
 public class RegisterGUI extends JFrame {
@@ -17,7 +19,7 @@ public class RegisterGUI extends JFrame {
     private JButton btnRegister;
     private JButton btnCancel;
     static boolean registerStatus;
-
+    private JTextField txtAdminKey;
     public RegisterGUI() {
         setTitle("Đăng ký tài khoản");
         setSize(400, 300);
@@ -53,7 +55,13 @@ public class RegisterGUI extends JFrame {
         gbc.gridx = 1;
         txtConfirmPassword = new JPasswordField(20);
         panel.add(txtConfirmPassword, gbc);
-
+        gbc.gridx = 0;
+        //label và AdminKey
+        gbc.gridy = 3;
+        panel.add(new JLabel("Admin Key:"), gbc);
+        gbc.gridx = 1;
+        txtAdminKey = new JTextField(20);
+        panel.add(txtAdminKey, gbc);
         // buttons
         JPanel buttonPanel = new JPanel();
         btnRegister = new JButton("Đăng ký");
@@ -63,7 +71,7 @@ public class RegisterGUI extends JFrame {
 
 
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         gbc.gridwidth = 2;
         panel.add(buttonPanel, gbc);
 
@@ -77,19 +85,25 @@ public class RegisterGUI extends JFrame {
             if (!txtUsername.getText().isEmpty() && !password.isEmpty() && !confirmPassword.isEmpty()) {
 
                 if (password.equals(confirmPassword)) {
-                    if (createAccount(txtUsername.getText(), password)) {
-                        JOptionPane.showMessageDialog(this, "Đăng kí thành công!");
-                            dispose();
-                            LoginGUI x = new LoginGUI();
-                            x.setVisible(true);
-                    }
-                    else {
-                        JOptionPane.showMessageDialog(this,"Tài khoản đã tồn tại");
+                    try {
+                        switch (new UserDAO().createAccount(txtUsername.getText(), password,txtAdminKey.getText())) {
+                            case 1:
+                                JOptionPane.showMessageDialog(this, "Đăng kí thành công!");
+                                dispose();
+                                LoginGUI x = new LoginGUI();
+                                x.setVisible(true);
+                            case 0:
+                                JOptionPane.showMessageDialog(this,"Tên đăng nhập đã tồn tại!");
+                            case 2:
+                                JOptionPane.showMessageDialog(this,"Admin Key không tồn tại!");
+                        }
+                    } catch (SQLException ex) {
+                        System.getLogger(RegisterGUI.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
                     }
 
                 }
                 else {
-                    JOptionPane.showMessageDialog(this,"Password phải trùng với Confirm Password!");
+                    JOptionPane.showMessageDialog(this,"Mật khẩu xác nhận không trùng khớp!");
                     registerStatus = false;
                 }
             }

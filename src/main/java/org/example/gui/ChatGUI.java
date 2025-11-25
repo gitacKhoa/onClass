@@ -3,12 +3,12 @@ package org.example.gui;
 import javax.swing.*;
 import java.awt.*;
 
-public class chatGUI extends JFrame {
+public class ChatGUI extends JFrame {
     private JTextArea chatArea;
     private JTextField inputField;
     private JButton sendButton;
 
-    public chatGUI() {
+    public ChatGUI() {
         setTitle("Chat App");
         setSize(400, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -43,6 +43,6 @@ public class chatGUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        new chatGUI();
+        new ChatGUI();
     }
 }

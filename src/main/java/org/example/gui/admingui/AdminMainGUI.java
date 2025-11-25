@@ -3,16 +3,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
-
+import java.sql.SQLException;
 import org.example.dao.UserDAO;
-import org.example.gui.LoginGUI;
-import org.example.util.UserSession;
 
-import static org.example.util.UserSession.getSession;
+
+import org.example.gui.LoginGUI;
+import org.example.model.User;
+import org.example.model.UserSession;
+import static org.example.model.UserSession.getSession;
 
 
 public class AdminMainGUI extends JFrame {
+    JButton btnSt;
     JButton btn1;
     JButton btn2;
     JButton btn3;
@@ -68,17 +70,20 @@ public class AdminMainGUI extends JFrame {
         btn1.setFont(new Font("ProductSans", Font.BOLD, 25));
         btn2 = new JButton("Quản lí dịch vụ quán");
         btn2.setFont(new Font("ProductSans", Font.BOLD, 25));
-        btn3 = new JButton("Chat");
+        btn3 = new JButton("Quản lí đơn đặt hàng");
         btn3.setFont(new Font("ProductSans", Font.BOLD, 25));
         btn4 = new JButton("Thống kê");
         btn4.setFont(new Font("ProductSans", Font.BOLD, 25));
         signOut = new JButton("Đăng xuất");
+        btnSt = new JButton("Sửa thông tin");
+        btnSt.setBounds(600,366,200,32);
         btn1.setBounds(19,50, 443,144);
         btn2.setBounds(482, 50, 443,144);
         btn3.setBounds(19, 214, 443,144);
         btn4.setBounds(482, 214, 443,144);
         signOut.setBounds(810,366,115,32);
-
+        
+        buttonPanel.add(btnSt);
         buttonPanel.add(btn1);
         buttonPanel.add(btn2);
         buttonPanel.add(btn3);
@@ -88,21 +93,35 @@ public class AdminMainGUI extends JFrame {
         btn1.addActionListener(e -> {
             eraseFrame();
             UserAccountManagerGUI mngframe= new UserAccountManagerGUI();
-            mngframe.init(this);
+            try {
+                mngframe.init(this);
+            } catch (SQLException ex) {
+                System.getLogger(AdminMainGUI.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            }
+        });
+        
+        btnSt.addActionListener(e -> {
+            setVisible(false);
+            new ServiceManageGUI(this);
         });
         btn2.addActionListener(e -> {
-            eraseFrame();
+            
+            setVisible(false);
+            new ServiceManageGUI(this);
         });
         btn3.addActionListener(e -> {
-            eraseFrame();
+            setVisible(false);
+            new OrderListGUI(this);
         });
         btn4.addActionListener(e -> {
-            eraseFrame();
+            setVisible(false);
+            new StatisticGUI(this).setVisible(true);
         });
 
         signOut.addActionListener(e -> {
+            
             UserSession.timerEnd();
-            UserDAO.addUseTime(UserSession.getSession().getUser().getUsername());
+            new UserDAO().addUseTime(UserSession.getSession().getUser().getUsername());
             UserSession.getSession().clearSession();
 
             dispose();
@@ -118,20 +137,20 @@ public class AdminMainGUI extends JFrame {
             public void windowClosing(WindowEvent e) {
                 UserSession.timerEnd();
                 UserSession.sessionTime();
-                UserDAO.addUseTime(UserSession.getSession().getUser().getUsername());
                 UserSession.getSession().clearSession();
 
             }
         });
     }
 
-        public static void main(String[] args) {
-            new AdminMainGUI();
-        }
         public void eraseFrame () {
             this.getContentPane().removeAll();
             this.revalidate();
             this.repaint();
+        }
+        
+        public void vsb (boolean x) {
+            this.setVisible(x);
         }
 
 }

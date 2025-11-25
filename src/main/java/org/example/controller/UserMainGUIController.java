@@ -1,12 +1,14 @@
 package org.example.controller;
 
-import org.example.dao.UserDAO;
+
 import org.example.gui.NetManagerGUI;
 import org.example.gui.usergui.UserMainGUI;
-import org.example.util.UserSession;
+import org.example.model.UserSession;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import org.example.dao.UserDAO;
+import org.example.model.User;
 
 public class UserMainGUIController {
     public UserMainGUIController(UserMainGUI frame) {
@@ -15,7 +17,7 @@ public class UserMainGUIController {
             public void windowClosing(WindowEvent e) {
                 UserSession.timerEnd();
                 UserSession.sessionTime();
-                UserDAO.addUseTime(UserSession.getSession().getUser().getUsername());
+                new UserDAO().addUseTime(UserSession.getSession().getUser().getUsername());
                 UserSession.getSession().clearSession();
 
             }

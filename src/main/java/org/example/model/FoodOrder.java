@@ -1,13 +1,14 @@
 package org.example.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-public class foodOrder extends Order {
+public class FoodOrder extends Order {
     private Product orderProduct;
     private int orderAmount;
-    public foodOrder(long totalMoney, LocalDate orderDate, LocalTime orderTime, Product orderProduct, int orderAmount) {
-        super(totalMoney, orderDate, orderTime);
+    public FoodOrder(int userId, long totalMoney, LocalDateTime dateTime, LocalDate orderDate, LocalTime orderTime,boolean isPaid, Product orderProduct, int orderAmount) {
+        super(userId, totalMoney,dateTime, orderDate, orderTime, isPaid);
         this.orderAmount = orderAmount;
         this.orderProduct = orderProduct;
     }

@@ -1,12 +1,14 @@
 package org.example.gui.admingui;
 
-import org.example.dao.UserDAO;
+
 import org.example.gui.NetManagerGUI;
 
 import javax.swing.*;
 import java.awt.*;
+import org.example.dao.UserDAO;
 
-import static org.example.dao.UserDAO.*;
+
+import org.example.model.User;
 
 public class UserAccountDetailGUI extends NetManagerGUI {
     JLabel frametitle, usernameLabel, ID, role, balance, timeuse, orders;
@@ -25,11 +27,12 @@ public class UserAccountDetailGUI extends NetManagerGUI {
 
         frametitle = new JLabel("Thông tin chi tiết" );
         usernameLabel = new JLabel("Tên tài Khoản: "+ username);
-        ID = new JLabel("ID: "+getUserID(username));
-        role = new JLabel("Quyền hạn: " + UserDAO.getUserRole(username));
-        balance = new JLabel("Số dư: "+getUserBalance(username));
-        timeuse = new JLabel("Tổng thời gian sử dụng: "+getUserUseTime(username) + " phút");
-        orders = new JLabel("Tổng đơn đã đặt: ");
+        UserDAO user = new UserDAO();
+        ID = new JLabel("ID: "+user.getUserID(username));
+        role = new JLabel("Quyền hạn: " + user.getUserRole(username));
+        balance = new JLabel("Số dư: "+user.getUserBalance(username));
+        timeuse = new JLabel("Tổng thời gian sử dụng: "+ user.getUserUseTime(username) + " phút");
+
         panel.add(frametitle);
         frametitle.setBounds(152,1,337,50);
         frametitle.setFont(bold);

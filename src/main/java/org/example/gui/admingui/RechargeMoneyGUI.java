@@ -1,10 +1,21 @@
 package org.example.gui.admingui;
 
-import org.example.dao.UserDAO;
+
+
 import org.example.gui.NetManagerGUI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import org.example.dao.OrderDAO;
+import org.example.dao.UserDAO;
+import org.example.model.ChargeOrder;
+import org.example.model.Order;
+import org.example.model.User;
+import org.example.model.UserSession;
 
 public class RechargeMoneyGUI extends NetManagerGUI {
 
@@ -59,11 +70,22 @@ public class RechargeMoneyGUI extends NetManagerGUI {
 
         //NÚT NẠP
         chargeBtn.addActionListener(e-> {
-            if(chargeAmount.getText().equals("") || Integer.parseInt(chargeAmount.getText())<= 0) {
-                JOptionPane.showMessageDialog(this, "Bạn cần nhập 1 số tiền hợp lệ!");
+            
+            if(chargeAmount.getText().equals("") ) {
+                JOptionPane.showMessageDialog(null, "Số tiền không hợp lệ, vui lòng nhập lại!");
             }
             else {
-                UserDAO.chargeMoney(this, Integer.parseInt(chargeAmount.getText()), username);
+                try {
+                    User u = UserSession.getSession().getUser();
+                    new UserDAO().chargeMoney(this, Integer.parseInt(chargeAmount.getText()), username);
+                    OrderDAO.saveOrder(u,new ChargeOrder(u.getUserId(),Long.parseLong(chargeAmount.getText()),LocalDateTime.now(),LocalDate.now(),LocalTime.now(),true));
+                }
+                catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Nạp tiền thất bại, vui lòng thử lại!");
+                }
+                catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Số tiền không hợp lệ, vui lòng nhập lại!");                    
+                }
             }
         });
         //NÚT HỦY

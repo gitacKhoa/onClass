@@ -1,13 +1,14 @@
 package org.example.gui.admingui;
 
-import org.example.dao.UserDAO;
 import org.example.gui.NetManagerGUI;
 
-import org.example.gui.notificationGUI;
+import org.example.model.User;
 import org.example.util.PlaceholderTextField;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.SQLException;
+import org.example.dao.UserDAO;
 
 public class CreateUserAccountGUI extends NetManagerGUI {
     JTextField usernameTxt;
@@ -58,20 +59,24 @@ public class CreateUserAccountGUI extends NetManagerGUI {
                 if (!usernameTxt.getText().isEmpty() && !password.isEmpty() && !confirmPassword.isEmpty()) {
 
                     if (password.equals(confirmPassword)) {
-                        if (UserDAO.createUserAccount(usernameTxt.getText(), password)) {
-                            notificationGUI notification = new notificationGUI("Đăng kí thành công!", "register");
-                        }
-                        else {
-                        notificationGUI noti = new notificationGUI("Tài khoản đã tồn tại!", "register");
+                        User newUser = new User(usernameTxt.getText(), password );
+                        try {
+                            if (new UserDAO().createUserAccount(newUser)) {
+                                JOptionPane.showMessageDialog(this, "Tạo tài khoản thành công");
+                            }
+                            else {
+                                JOptionPane.showMessageDialog(this, "Tài khoản đã tồn tại!");
+                            }
+                        } catch (SQLException ex) {
+                            JOptionPane.showMessageDialog(this, "Gặp lỗi khi thêm tài khoản, thử lại sau!");
                         }
                     }
                     else {
-                        notificationGUI noti = new notificationGUI("Password phải trùng với Confirm Password!", "register");
-
+                        JOptionPane.showMessageDialog(this, "Mật khẩu cần trùng khớp!");
                     }
                 }
                 else {
-                    notificationGUI noti = new notificationGUI("Bạn cần nhập đầy đủ thông tin!", "register");
+                    JOptionPane.showMessageDialog(this, "Bạn cần nhập đầy đủ thông tin!");
 
                 }
             });

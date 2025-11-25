@@ -1,0 +1,35 @@
+===== NĂM 2025 =====
+Tổng số đơn: 1
+Đơn đã thanh toán: 1
+Đơn chưa thanh toán: 0
+Tổng doanh thu: 40000
+Doanh thu nạp tiền (order_type=1): 0
+Doanh thu theo sản phẩm:
+  Product ID 8: 40000
+--------------------------------------
+===== NGÀY 2025-11-21 =====
+Tổng số đơn: 1
+Đơn đã thanh toán: 1
+Đơn chưa thanh toán: 0
+Tổng doanh thu: 40000
+Doanh thu nạp tiền (order_type=1): 0
+Doanh thu từng loại sản phẩm:
+  Product ID 8: 40000
+--------------------------------------
+===== THÁNG 11-2025 =====
+Tổng số đơn: 1Đơn đã thanh toán: 1
+Đơn chưa thanh toán: 0
+Tổng doanh thu: 40000
+Doanh thu nạp tiền (order_type=1): 0
+Doanh thu theo sản phẩm:
+  Product ID 8: 40000
+--------------------------------------
+===== NĂM 2025 =====
+Tổng số đơn: 1
+Đơn đã thanh toán: 1
+Đơn chưa thanh toán: 0
+Tổng doanh thu: 40000
+Doanh thu nạp tiền (order_type=1): 0
+Doanh thu theo sản phẩm:
+  Product ID 8: 40000
+--------------------------------------

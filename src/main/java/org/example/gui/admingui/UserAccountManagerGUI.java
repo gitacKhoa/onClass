@@ -1,9 +1,12 @@
 package org.example.gui.admingui;
 
-import org.example.dao.UserDAO;
+
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.SQLException;
+import org.example.dao.UserDAO;
+import org.example.model.User;
 
 public class UserAccountManagerGUI {
     private JTextField thanhTim;
@@ -20,7 +23,7 @@ public class UserAccountManagerGUI {
     private JButton xemChiTiet;
     private JButton refresh;
     private JButton back;
-    public void init (AdminMainGUI mainFrame) {
+    public void init (AdminMainGUI mainFrame) throws SQLException {
         refresh = new JButton("Refresh");
         thanhTim = new JTextField();
         xemChiTiet = new JButton("Xem chi tiết");
@@ -30,10 +33,13 @@ public class UserAccountManagerGUI {
         nutXoa = new JButton("Xóa");
         back = new JButton("Trở lại");
         modelDanhSach = new DefaultListModel<>();
-        UserDAO.getAllUsername(modelDanhSach);
-
+        new UserDAO().getAllUsername(modelDanhSach);
+        
         danhSach = new JList<>(modelDanhSach);
-
+        if(modelDanhSach.isEmpty()) {
+            JOptionPane.showMessageDialog(null,"Chưa có tài khoản khách");
+        }
+        
         chucNangLabel = new JLabel("Chức năng");
         danhSachLabel = new JLabel("Danh sách tài khoản");
 
@@ -98,7 +104,14 @@ public class UserAccountManagerGUI {
             // TÌM TRONG MODEL GỐC:
             boolean found = false;
             DefaultListModel<String> searchResult = new DefaultListModel<>();
-
+            DefaultListModel <String> refresh = new DefaultListModel<>();
+            try {
+                new UserDAO().getAllUsername(refresh);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Lỗi truy vấn dữ liệu");
+            }
+            modelDanhSach = refresh;
+            danhSach.setModel(modelDanhSach);
             for (int i = 0; i < modelDanhSach.size(); i++) {
                 String item = modelDanhSach.getElementAt(i);
                 if (item.toLowerCase().contains(keyword.toLowerCase())) {
@@ -118,9 +131,13 @@ public class UserAccountManagerGUI {
         //
         refresh.addActionListener(e->{
             DefaultListModel <String> refresh = new DefaultListModel<>();
-            UserDAO.getAllUsername(refresh);
+            try {
+                new UserDAO().getAllUsername(refresh);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Lỗi truy vấn dữ liệu");
+            }
             modelDanhSach = refresh;
-            danhSach.setModel(refresh);
+            danhSach.setModel(modelDanhSach);
         });
 
         //
@@ -153,9 +170,13 @@ public class UserAccountManagerGUI {
 
         nutXoa.addActionListener(e->{
 
-            if (JOptionPane.showConfirmDialog(mainFrame,"Bạn có chắc muốn xóa?","Xác nhận", JOptionPane.YES_NO_OPTION)== JOptionPane.YES_OPTION) {
-                String rmvUsername = danhSach.getSelectedValue();
-                UserDAO.deleteUserAccount(rmvUsername);
+            try {
+                if (JOptionPane.showConfirmDialog(mainFrame, "Bạn có chắc muốn xóa?", "Xác nhận", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    String rmvUsername = danhSach.getSelectedValue();
+                    new UserDAO().deleteUserAccount(rmvUsername);
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Xóa User thất bại, vui lòng thử lại sau!");
             }
 
         });

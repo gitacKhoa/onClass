@@ -1,217 +1,198 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package org.example.dao;
 
-
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import org.example.gui.admingui.RechargeMoneyGUI;
 import org.example.model.User;
 import org.example.util.DatabaseConnection;
-import org.example.util.UserSession;
 
-import javax.swing.*;
-import java.sql.*;
-
+/**
+ *
+ * @author khoa
+ */
 public class UserDAO {
+
     //
     //CHECK USERNAME VÀ MẬT KHẨU
     //
-    public static String checkUsername (String Username) {
-        try ( Connection conn = DatabaseConnection.getConnection()) {
-            String sql= "SELECT password_hash\n" +
-                    "FROM users\n" +
-                    "WHERE username = ?;";
+    public String checkUsername(String Username) throws SQLException {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "SELECT password_hash\n" + "FROM users\n" + "WHERE username = ?;";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, Username);
             ResultSet rs = stmt.executeQuery();
-            if ( rs.next()) {
+            if (rs.next()) {
                 String returnPassword = rs.getString("password_hash");
                 return returnPassword;
-            }
-            else {
+            } else {
                 return "";
             }
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return "";
+        } catch (Exception e) {
+            throw new SQLException(e);
         }
     }
-    //
-    //LẤY ID
-    //
-    public static int getUserID (String Username) {
-        try ( Connection conn = DatabaseConnection.getConnection()) {
-            String sql= "SELECT user_id\n" +
-                        "FROM users\n" +
-                        "WHERE username = ?;";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, Username);
-            ResultSet rs = stmt.executeQuery();
-            rs.next();
-            return rs.getInt("user_id");
-        }
-        catch (Exception e){
-            e.printStackTrace();
 
-        }
-        return 0;
-    }
-    //
-    // LẤY ROLE CỦA USER
-    //
-    public static String getUserRole (String Username) {
-        try ( Connection conn = DatabaseConnection.getConnection()) {
-            String sql= "SELECT user_role\n" +
-                    "FROM users\n" +
-                    "WHERE username = ?;";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, Username);
-            ResultSet rs = stmt.executeQuery();
-            rs.next();
-            return rs.getString("user_role");
-        }
-        catch (Exception e){
-            e.printStackTrace();
-
-        }
-        return null;
-    }
-    //
-    //LẤY TẤT CẢ USERNAME
-    //
-    public static void getAllUsername (DefaultListModel <String> model){
-        try (Connection conn = DatabaseConnection.getConnection()) {
-            String sql = "SELECT username\n" +
-                         "FROM users\n";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                model.addElement(rs.getString("username"));
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
     //
     //TẠO ACCOUNT (ADMIN) TẠI MÀN HÌNH ĐĂNG KÍ
     //
-    public static boolean createAccount (String username, String password) {
-        try (Connection conn = DatabaseConnection.getConnection();){
+    public int createAccount(String username, String password, String adminKey) throws SQLException {
+        try (Connection conn = DatabaseConnection.getConnection()) {
             //thuc thi ket noi
-
-            String sql = "INSERT INTO users (username, password_hash, user_role) VALUES (?, ?, 'admin');";
-            PreparedStatement stm = conn.prepareStatement(sql);
-            stm.setString(1,username);
-            stm.setString(2, password);
-            //kiem tra xem da co tai khoan chua
-            if (!Get.haveOne("users", "username", username)) {
-                stm.executeUpdate();
-
-                return true;
+            if (adminKey.equals("")) {
+                String sql = "INSERT INTO users (username, password_hash, user_role) VALUES (?, ?, 'user');";
+                PreparedStatement stm = conn.prepareStatement(sql);
+                stm.setString(1, username);
+                stm.setString(2, password);
+                //kiem tra xem da co tai khoan chua
+                System.out.println("hello");
+                if (!haveOne("users", "username", username)) {
+                    stm.executeUpdate();
+                    return 1;
+                }
+            } else if (adminKey.equals("THISISADMIN123")) {
+                String sql = "INSERT INTO users (username, password_hash, user_role) VALUES (?, ?, 'admin');";
+                PreparedStatement stm = conn.prepareStatement(sql);
+                stm.setString(1, username);
+                stm.setString(2, password);
+                if (!haveOne("users", "username", username)) {
+                    stm.executeUpdate();
+                    return 1;
+                }
+            } else {
+                return 2;
             }
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
-        catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return false;
+        return 0;
     }
+
     //
     //TẠO TÀI KHOẢN KHÁCH
     //
-    public static boolean createUserAccount (String username, String password) {
-        try(Connection conn = DatabaseConnection.getConnection();) {
-            //thuc thi ket noi
+    public boolean createUserAccount(User user) throws SQLException {
+        try (Connection conn = DatabaseConnection.getConnection()) {
             String sql = "INSERT INTO users (username, password_hash) VALUES (?, ?);";
             PreparedStatement stm = conn.prepareStatement(sql);
-            stm.setString(1,username);
-            stm.setString(2, password);
-            //kiem tra xem da co tai khoan chua
-            if (!Get.haveOne("users", "username", username)) {
+            stm.setString(1, user.getUsername());
+            stm.setString(2, user.getPassword());
+            if (!haveOne("users", "username", user.getUsername())) {
                 stm.executeUpdate();
-
                 return true;
             }
-        }
-        catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
         return false;
     }
-    //
-    //XÓA TÀI KHOẢN KHÁCH
-    //
-    public static void deleteUserAccount (String username) {
-        try (Connection conn = DatabaseConnection.getConnection();){
 
-            String sql = "DELETE FROM users\n" +
-                         "WHERE username = ?;\n";
-
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, username);
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
     //
     //NẠP TIỀN CHO KHÁCH
     //
-    public static void chargeMoney (RechargeMoneyGUI rc, int chargeAmount, String username) {
-        try (Connection conn = DatabaseConnection.getConnection();){
-
-            String sql = "UPDATE users\n" +
-                         "SET balance = balance + ?\n" +
-                         "WHERE username = ?;";
-
+    public void chargeMoney(RechargeMoneyGUI rc, int chargeAmount, String username) throws SQLException {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "UPDATE users\n" + "SET balance = balance + ?\n" + "WHERE username = ?;";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, chargeAmount);
             stmt.setString(2, username);
             stmt.executeUpdate();
-            JOptionPane.showMessageDialog(rc, "Nạp thành công!");
+            JOptionPane.showMessageDialog(rc, "N\u1ea1p th\u00e0nh c\u00f4ng!");
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(rc, "Nạp thất bại, vui lòng thử lại!");
-            throw new RuntimeException(e);
-
+            throw new SQLException(e);
         }
     }
     //
     // TÍNH TỔNG GIỜ SỬ DỤNG TRONG CÁC PHIÊN ĐĂNG NHẬP
     //
 
-    public static void addUseTime (String username) {
-        try (Connection conn = DatabaseConnection.getConnection();){
-
-            String sql = "UPDATE users\n" +
-                         "SET usetime = usetime + ?\n" +
-                         "WHERE username = ?;";
-
+    //
+    //LẤY TẤT CẢ USERNAME
+    //
+    public void getAllUsername(DefaultListModel<String> model) throws SQLException {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "SELECT username\n" + "FROM users\n";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setLong(1, UserSession.sessionTime());
-            stmt.setString(2, username);
-            stmt.executeUpdate();
-
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                model.addElement(rs.getString("username"));
+            }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new SQLException(e);
+        }
+    }
+
+    public User getUserByUsername(String username) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "SELECT user_id, username, password_hash, user_role, balance, usetime " + "FROM users WHERE username = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                int id = rs.getInt("user_id");
+                String username1 = rs.getString("username");
+                String password = rs.getString("password_hash");
+                String role = rs.getString("user_role");
+                long balance = rs.getLong("balance");
+                long useTime = rs.getLong("usetime");
+                return new User(id, username1, password, role, balance, useTime);
+            } else {
+                return null; // không tìm thấy user
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public int getUserUseTime(String Username) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "SELECT usetime\n" + "FROM users\n" + "WHERE username = ?;";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, Username);
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            return rs.getInt("usetime");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    //
+    //XÓA TÀI KHOẢN KHÁCH
+    //
+    public void deleteUserAccount(String username) throws SQLException {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "DELETE FROM users\n" + "WHERE username = ?;\n";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, username);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException(e);
         }
     }
 
     //
     // LẤY SỐ DƯ
     //
-
-    public static long getUserBalance (String Username) {
-        try ( Connection conn = DatabaseConnection.getConnection()) {
-            String sql= "SELECT balance\n" +
-                        "FROM users\n" +
-                        "WHERE username = ?;";
+    public long getUserBalance(String Username) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "SELECT balance\n" + "FROM users\n" + "WHERE username = ?;";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, Username);
             ResultSet rs = stmt.executeQuery();
             rs.next();
             return rs.getLong("balance");
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-
         }
         return 0;
     }
@@ -219,50 +200,116 @@ public class UserDAO {
     // LẤY TỔNG THỜI GIAN SỬ DỤNG
     //
 
-    public static int getUserUseTime (String Username) {
-        try ( Connection conn = DatabaseConnection.getConnection()) {
-            String sql= "SELECT usetime\n" +
-                        "FROM users\n" +
-                        "WHERE username = ?;";
+    //
+    //LẤY ID
+    //
+    public int getUserID(String Username) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "SELECT user_id\n" + "FROM users\n" + "WHERE username = ?;";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, Username);
             ResultSet rs = stmt.executeQuery();
             rs.next();
-            return rs.getInt("usetime");
-        }
-        catch (Exception e){
+            return rs.getInt("user_id");
+        } catch (Exception e) {
             e.printStackTrace();
-
         }
         return 0;
     }
+
     //
-    //Gán tất cả thông tin cho user
+    // LẤY ROLE CỦA USER
     //
-    public static void setUser (String username, User user) {
-        try ( Connection conn = DatabaseConnection.getConnection()) {
-            String sql= "SELECT *\n" +
-                    "FROM users\n" +
-                    "WHERE BINARY username = ?;";
+    public String getUserRole(String Username) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "SELECT user_role\n" + "FROM users\n" + "WHERE username = ?;";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, username);
+            stmt.setString(1, Username);
             ResultSet rs = stmt.executeQuery();
             rs.next();
-            user.setUserID(rs.getString("user_id"));
-            user.setUsername(rs.getString("username"));
-            user.setUserRole(rs.getString("user_role"));
-            user.setBalance(rs.getLong("balance"));
-            user.setUseTime(rs.getLong("usetime"));
-
-        }
-        catch (Exception e){
+            return rs.getString("user_role");
+        } catch (Exception e) {
             e.printStackTrace();
+        }
+        return null;
+    }
 
+    public boolean haveOne(String table, String row, String key) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "SELECT 1 \n" + "FROM ?  \n" + "WHERE ? = ? \n" + "LIMIT 1;";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, table);
+            stmt.setString(2, row);
+            stmt.setString(3, key);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+        } catch (Exception e) {
+        }
+        System.out.println("sai");
+        return false;
+    }
+
+    public User getUserById(int userId) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "SELECT user_id, username, password_hash, user_role, balance, usetime " + "FROM users WHERE user_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                int id = rs.getInt("user_id");
+                String username = rs.getString("username");
+                String password = rs.getString("password_hash");
+                String role = rs.getString("user_role");
+                long balance = rs.getLong("balance");
+                long useTime = rs.getLong("usetime");
+                return new User(id, username, password, role, balance, useTime);
+            } else {
+                return null; // không tìm thấy user
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
-    //
-    // LẤY TỔNG ĐƠN
-    //
+    public void adjustBalance(String username, long a) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "UPDATE users\n" + "SET balance = balance + ?\n" + "WHERE username = ?;";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setLong(1, a);
+            stmt.setString(2, username);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    public void addUseTime(String username) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "UPDATE users\n" + "SET usetime = usetime + ?\n" + "WHERE username = ?;";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setLong(1, 1);
+            stmt.setString(2, username);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public String getUsername(int userId) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "SELECT username\n" + "FROM users\n" + "WHERE user_id = ?;";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            return rs.getString("username");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "#";
+    }
+    
 }

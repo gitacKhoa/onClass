@@ -1,13 +1,16 @@
 package org.example.gui;
+import java.awt.HeadlessException;
+import java.sql.SQLException;
 import javax.swing.*;
-
 import org.example.dao.UserDAO;
+
+
 import org.example.gui.admingui.AdminMainGUI;
 import org.example.gui.usergui.UserMainGUI;
 import org.example.model.User;
-import org.example.util.UserSession;
+import org.example.model.UserSession;
 
-import static org.example.dao.UserDAO.*;
+
 
 public class LoginGUI extends JFrame {
     JButton DangNhap ;
@@ -75,30 +78,35 @@ public class LoginGUI extends JFrame {
             String password = new String(txtPassword.getPassword());
 
             if (!password.equals("") && !username.equals("")) {
-                if (UserDAO.checkUsername(username).equals(password)) {
-                    User user = new User(username);
-                    setUser(username, user);
+                try {
+                    if (new UserDAO().checkUsername(username).equals(password)) {
 
-                    JOptionPane.showMessageDialog(this, "Đăng nhập thành công");
+                        User user = new UserDAO().getUserByUsername(username);
 
-                    UserSession.createSession(user);
-                    UserSession.timerStart();
-                    dispose();
-                    //
-                    // KIỂM TRA ROLE VÀ KHỞI TẠO MÀN HÌNH MAINGUI CHO TỪNG ROLE
-                    //
-                    if (UserSession.getSession().getUser().getUserRole().equals("admin")) {
-                        AdminMainGUI y = new AdminMainGUI();
-                        y.mainFrameInit(y);
-                    }
-                    if (UserSession.getSession().getUser().getUserRole().equals("user")) {
-                        UserMainGUI u = new UserMainGUI("Dịch vụ quán net", 1000, 600);
-                        u.mainFrameInit(u);
-                    }
+                        JOptionPane.showMessageDialog(this, "Đăng nhập thành công");
+
+                        UserSession.createSession(user);
+                        UserSession.timerStart();
+                        dispose();
+                        //
+                        // KIỂM TRA ROLE VÀ KHỞI TẠO MÀN HÌNH MAINGUI CHO TỪNG ROLE
+                        //
+                        if (UserSession.getSession().getUser().getUserRole().equals("admin")) {
+                            AdminMainGUI y = new AdminMainGUI();
+                            y.mainFrameInit(y);
+                        }
+                        if (UserSession.getSession().getUser().getUserRole().equals("user")) {
+                            UserMainGUI u = new UserMainGUI();
+                            System.out.println("ok");
+
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Tên đăng nhập hoặc mật khẩu không đúng!");
                 }
-                else {
-                    JOptionPane.showMessageDialog(this,"Tài khoản hoặc mật khẩu không chính xác!");
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(this, "Gặp lỗi khi đăng nhập, vui lòng thử lại sau!");
                 }
+
             }
             else {
                 JOptionPane.showMessageDialog(this,"Bạn cần nhập đầy đủ Username và Password!");
