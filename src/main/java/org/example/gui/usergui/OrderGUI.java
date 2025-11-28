@@ -17,6 +17,7 @@ import org.example.model.Order;
 import org.example.model.Product;
 import org.example.model.User;
 import org.example.model.UserSession;
+import org.example.util.Functions;
 
 /**
  *
@@ -188,7 +189,7 @@ public class OrderGUI extends javax.swing.JFrame {
             //TRỪ TIỀN KHÁCH
             user.adjustBalance(UserSession.getSession().getUser().getUsername(), -Long.parseLong(lblTotal.getText()));
             //THÊM DOANH SỐ CỦA MẶT HÀNG
-            ProductDAO.updateProductBenefit(lblTotal.getText(), ord.getOrderId());
+            new ProductDAO().updateProductBenefit(ord);
         }
         else {
             FoodOrder ord = new FoodOrder(UserSession.getSession().getUser().getUserId(),Long.parseLong(lblTotal.getText()), LocalDateTime.now(),LocalDate.now(),  LocalTime.now(),false, pd, (int) spinAmount.getValue()  );

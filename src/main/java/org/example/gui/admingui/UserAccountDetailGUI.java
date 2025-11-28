@@ -11,10 +11,12 @@ import org.example.dao.UserDAO;
 import org.example.model.User;
 
 public class UserAccountDetailGUI extends NetManagerGUI {
+    
     JLabel frametitle, usernameLabel, ID, role, balance, timeuse, orders;
     JPanel panel;
     Font plain;
     Font bold;
+    DefaultListModel <Object> orderList;
     public UserAccountDetailGUI(String title, int width, int height, String username) {
         super(title, width, height);
         plain = new Font("Arial", Font.PLAIN, 24);

@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import static java.sql.Types.VARCHAR;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import org.example.gui.admingui.RechargeMoneyGUI;
@@ -97,14 +98,14 @@ public class UserDAO {
     //
     //NẠP TIỀN CHO KHÁCH
     //
-    public void chargeMoney(RechargeMoneyGUI rc, int chargeAmount, String username) throws SQLException {
+    public void chargeMoney( int chargeAmount, String username) throws SQLException {
         try (Connection conn = DatabaseConnection.getConnection()) {
             String sql = "UPDATE users\n" + "SET balance = balance + ?\n" + "WHERE username = ?;";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, chargeAmount);
             stmt.setString(2, username);
             stmt.executeUpdate();
-            JOptionPane.showMessageDialog(rc, "N\u1ea1p th\u00e0nh c\u00f4ng!");
+            JOptionPane.showMessageDialog(null, "Nạp thành công!");
         } catch (SQLException e) {
             throw new SQLException(e);
         }
@@ -310,6 +311,136 @@ public class UserDAO {
             e.printStackTrace();
         }
         return "#";
+    }
+
+    //
+    //Gán tất cả thông tin cho user
+    //
+    public void setUser(String username, User user) {
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "SELECT *\n" + "FROM users\n" + "WHERE BINARY username = ?;";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            user.setUserId(rs.getInt("user_id"));
+            user.setUsername(rs.getString("username"));
+            user.setUserRole(rs.getString("user_role"));
+            user.setBalance(rs.getLong("balance"));
+            user.setUseTime(rs.getLong("usetime"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public boolean updateUser(int userId, User user) {
+        String sql = """
+        UPDATE users
+        SET  email = ?, phone_number = ?
+        WHERE user_id = ?
+    """;
+
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+
+
+            // email
+            if (user.getEmail() == null) {
+                ps.setNull(1, VARCHAR);
+            } else {
+                ps.setString(1, user.getEmail());
+            }
+
+            // phone_number
+            if (user.getPhone() == null) {
+                ps.setNull(2, VARCHAR);
+            } else {
+                ps.setString(2, user.getPhone());
+            }
+
+            ps.setInt(3, userId);
+
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean updatePassword(int userId, String password) {
+        String sql = """
+        UPDATE users
+        SET password_hash = ?
+        WHERE user_id = ?
+    """;
+
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, password);
+            ps.setInt(2, userId);
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public User getUserById1(int userId) {
+        String sql = "SELECT * FROM users WHERE user_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    User user = new User();
+
+                    user.setUserId(rs.getInt("user_id"));
+                    user.setUsername(rs.getString("username"));
+                    user.setPassword(rs.getString("password_hash"));
+                    user.setBalance(rs.getLong("balance"));
+                    user.setUseTime(rs.getLong("usetime"));
+                    user.setUserRole(rs.getString("user_role"));
+                    user.setRank(rs.getString("user_rank"));
+                    user.setEmail(rs.getString("email"));
+                    user.setPhone(rs.getString("phone_number"));
+
+                    return user;
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null; // không có user
+    }
+    //
+    // NÂNG HẠNG TÀI KHOẢN
+    //
+    public boolean rankUp(String username, String newRank) {
+        // Câu SQL cập nhật rank mới
+        String sql = "UPDATE users SET user_rank = ? WHERE username = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            // Truyền giá trị hạng mới
+            ps.setString(1, newRank);
+
+            // Truyền username cần nâng hạng
+            ps.setString(2, username);
+
+            // Thực thi update
+            int rowsAffected = ps.executeUpdate();
+
+            // Nếu có ít nhất 1 dòng bị ảnh hưởng thì update thành công
+            return rowsAffected > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
     
 }

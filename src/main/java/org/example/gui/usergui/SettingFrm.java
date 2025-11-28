@@ -4,6 +4,11 @@
  */
 package org.example.gui.usergui;
 
+import javax.swing.JOptionPane;
+import org.example.dao.UserDAO;
+import org.example.model.User;
+import org.example.model.UserSession;
+
 /**
  *
  * @author khoa
@@ -17,6 +22,10 @@ public class SettingFrm extends javax.swing.JFrame {
      */
     public SettingFrm() {
         initComponents();
+        setLocationRelativeTo(null);
+        pack();
+        setVisible(true);
+        loadUser();
     }
 
     /**
@@ -35,62 +44,91 @@ public class SettingFrm extends javax.swing.JFrame {
         txtEmail = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         btnHuy = new javax.swing.JButton();
         btnLuu = new javax.swing.JButton();
-        txtMk = new javax.swing.JPasswordField();
-        txtXnmk = new javax.swing.JPasswordField();
+        jButton1 = new javax.swing.JButton();
+        btnSDT = new javax.swing.JButton();
+        btnE = new javax.swing.JButton();
 
         jTextArea2.setColumns(20);
         jTextArea2.setRows(5);
         jScrollPane2.setViewportView(jTextArea2);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        txtSdt.setEditable(false);
+
+        txtEmail.setEditable(false);
 
         jLabel1.setText("SDT");
 
         jLabel2.setText("Email");
 
-        jLabel3.setText("Mật khẩu");
-
         jLabel4.setText("Thông tin tài khoản");
-
-        jLabel5.setText("Xác nhận mật khẩu");
 
         btnHuy.setText("Hủy");
 
         btnLuu.setText("Lưu");
+        btnLuu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLuuActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Đổi mật khẩu");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        btnSDT.setText("Sửa");
+        btnSDT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSDTActionPerformed(evt);
+            }
+        });
+
+        btnE.setText("Sửa");
+        btnE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(59, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel5))
-                .addGap(27, 27, 27)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtMk, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtXnmk, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtSdt, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(61, 61, 61))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(149, 149, 149)
-                .addComponent(btnHuy)
-                .addGap(54, 54, 54)
-                .addComponent(btnLuu)
-                .addGap(40, 40, 40))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel4)
-                .addGap(196, 196, 196))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addGap(50, 50, 50)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnE, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(txtSdt, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnSDT, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(148, 148, 148)
+                        .addComponent(jLabel4))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(66, 66, 66)
+                        .addComponent(btnHuy)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnLuu)))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -100,41 +138,62 @@ public class SettingFrm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtSdt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                    .addComponent(jLabel1)
+                    .addComponent(btnSDT))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jLabel2)
+                    .addComponent(btnE))
+                .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(txtMk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(txtXnmk, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnLuu)
                     .addComponent(btnHuy)
-                    .addComponent(btnLuu))
-                .addContainerGap(26, Short.MAX_VALUE))
+                    .addComponent(jButton1))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnLuuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLuuActionPerformed
+        if ( txtEmail.getText().equals("") || txtSdt.getText().equals("")) {
+            dispose();
+        }
+        User u = new User();
+        u.setEmail(txtEmail.getText());
+        u.setPhone(txtSdt.getText());
+            
+        if (new UserDAO().updateUser(UserSession.getSession().getUser().getUserId(),u )) {
+            JOptionPane.showMessageDialog(this, "Cập nhật thành công!");
+            return;
+        }
+        JOptionPane.showMessageDialog(this, "Cập nhật thất bại!");
+    }//GEN-LAST:event_btnLuuActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        new ChangePasswordGUI().setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEActionPerformed
+        txtEmail.setEditable(true);
+    }//GEN-LAST:event_btnEActionPerformed
+
+    private void btnSDTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSDTActionPerformed
+        // TODO add your handling code here:
+        txtSdt.setEditable(true);
+    }//GEN-LAST:event_btnSDTActionPerformed
 
     /**
      * @param args the command line arguments
@@ -160,21 +219,25 @@ public class SettingFrm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new SettingFrm().setVisible(true));
     }
-
+    public void loadUser () {
+        User u = new UserDAO().getUserById1(UserSession.getSession().getUser().getUserId());
+        txtEmail.setText(u.getEmail());
+        txtSdt.setText(u.getPhone());
+    }
+            
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnE;
     private javax.swing.JButton btnHuy;
     private javax.swing.JButton btnLuu;
+    private javax.swing.JButton btnSDT;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextField txtEmail;
-    private javax.swing.JPasswordField txtMk;
     private javax.swing.JTextField txtSdt;
-    private javax.swing.JPasswordField txtXnmk;
     // End of variables declaration//GEN-END:variables
 }

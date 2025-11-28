@@ -1,4 +1,4 @@
-
+    
 package org.example.gui.usergui;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -67,15 +67,16 @@ public class UserMainGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton2 = new javax.swing.JButton();
         headingPanel = new javax.swing.JPanel();
         name = new javax.swing.JLabel();
         greetingLabel = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         lblTime = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         lblMoney = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         servicesTabPane = new javax.swing.JTabbedPane();
         menuPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -83,12 +84,15 @@ public class UserMainGUI extends javax.swing.JFrame {
         btnCharge = new javax.swing.JButton();
         btnOrd = new javax.swing.JButton();
         btnSignOut = new javax.swing.JButton();
+        btnRank = new javax.swing.JButton();
         orderPanel = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         orderList1 = new org.example.gui.usergui.OrderList<>();
         logPanel = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         logList1 = new org.example.gui.usergui.LogList<>();
+
+        jButton2.setText("jButton2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -99,7 +103,7 @@ public class UserMainGUI extends javax.swing.JFrame {
         greetingLabel.setText("Xin chào,");
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel1.setText("Thời gian còn lại:");
+        jLabel1.setText("Thời gian còn lại");
 
         lblTime.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lblTime.setText("# Phút");
@@ -107,13 +111,22 @@ public class UserMainGUI extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel2.setText("Số dư");
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel3.setText(":");
-
         lblMoney.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lblMoney.setText("Số dư");
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/cog.png"))); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/message-circle-exclamation.png"))); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout headingPanelLayout = new javax.swing.GroupLayout(headingPanel);
         headingPanel.setLayout(headingPanelLayout);
@@ -126,39 +139,39 @@ public class UserMainGUI extends javax.swing.JFrame {
                     .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(headingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(headingPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel3))
+                    .addComponent(jLabel2)
                     .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(6, 6, 6)
                 .addGroup(headingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblTime, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-                    .addComponent(lblMoney, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblTime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblMoney, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(headingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(23, 23, 23))
         );
         headingPanelLayout.setVerticalGroup(
             headingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(headingPanelLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(headingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(headingPanelLayout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(headingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(greetingLabel)
                             .addComponent(jLabel1)
                             .addComponent(lblTime))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(headingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(headingPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel2)
-                                .addComponent(jLabel3)
-                                .addComponent(lblMoney))))
+                            .addComponent(jLabel2)
+                            .addComponent(lblMoney, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(headingPanelLayout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(11, 11, 11)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(headingPanelLayout.createSequentialGroup()
+                        .addComponent(greetingLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -190,6 +203,14 @@ public class UserMainGUI extends javax.swing.JFrame {
             }
         });
 
+        btnRank.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        btnRank.setText("Nâng hạng tài khoản");
+        btnRank.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRankActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout menuPanelLayout = new javax.swing.GroupLayout(menuPanel);
         menuPanel.setLayout(menuPanelLayout);
         menuPanelLayout.setHorizontalGroup(
@@ -202,9 +223,10 @@ public class UserMainGUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnOrd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnCharge, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btnCharge, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnRank, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(menuPanelLayout.createSequentialGroup()
-                        .addGap(99, 99, 99)
+                        .addGap(95, 95, 95)
                         .addComponent(btnSignOut, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(26, 26, 26))
         );
@@ -214,13 +236,14 @@ public class UserMainGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(menuPanelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnCharge, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnOrd, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRank, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(38, 38, 38)
                         .addComponent(btnSignOut, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(87, 87, 87))
+                        .addGap(0, 38, Short.MAX_VALUE))
                     .addComponent(jScrollPane1))
                 .addContainerGap())
         );
@@ -296,7 +319,7 @@ public class UserMainGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnChargeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChargeActionPerformed
-        
+        new ChargeGUI();
     }//GEN-LAST:event_btnChargeActionPerformed
 
     private void btnOrdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrdActionPerformed
@@ -324,6 +347,23 @@ public class UserMainGUI extends javax.swing.JFrame {
         dispose();
         new LoginGUI().setVisible(true);
     }//GEN-LAST:event_btnSignOutActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        new SettingFrm();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        new ReportGUI();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void btnRankActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRankActionPerformed
+        User u = new UserDAO().getUserById1(UserSession.getSession().getUser().getUserId());
+        if (u.getRank().equals("Elite")) {
+            JOptionPane.showMessageDialog(null, "Bạn đã ở rank cao nhất!!!");
+            return;
+        }
+        new RankGUI().setVisible(true);
+    }//GEN-LAST:event_btnRankActionPerformed
     //
     //VẼ LẠI DANH SÁCH ĐƠN
     //
@@ -377,14 +417,16 @@ public class UserMainGUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCharge;
     private javax.swing.JButton btnOrd;
+    private javax.swing.JButton btnRank;
     private javax.swing.JButton btnSignOut;
     private org.example.gui.usergui.CustomList<String> customList1;
     private javax.swing.JLabel greetingLabel;
     private javax.swing.JPanel headingPanel;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

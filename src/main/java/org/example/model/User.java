@@ -18,10 +18,13 @@ public class User {
     private long balance;
     private long useTime;
     private String rank;
-
+    private String email;
+    private String phone;
+           
     public User() {
     }
-    
+
+
     public User( String username, String password, String userRole, int orderAmount, long balance, long useTime) {
 
         this.username = username;
@@ -124,34 +127,23 @@ public class User {
     public void setUseTime(long useTime) {
         this.useTime = useTime;
     }
-
-    //
-    //Gán tất cả thông tin cho user
-    //
-    public void setUser (String username, User user) {
-        try ( Connection conn = DatabaseConnection.getConnection()) {
-            String sql= "SELECT *\n" +
-                    "FROM users\n" +
-                    "WHERE BINARY username = ?;";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, username);
-            ResultSet rs = stmt.executeQuery();
-            rs.next();
-            user.setUserId(rs.getInt("user_id"));
-            user.setUsername(rs.getString("username"));
-            user.setUserRole(rs.getString("user_role"));
-            user.setBalance(rs.getLong("balance"));
-            user.setUseTime(rs.getLong("usetime"));
-
-        }
-        catch (Exception e){
-            e.printStackTrace();
-
-        }
+    public String getEmail() {
+        return email;
     }
-    //
-    // LẤY TT USER TỪ ID
-    //
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+    
+
 
     
     

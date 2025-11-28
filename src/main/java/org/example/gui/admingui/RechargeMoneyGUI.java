@@ -77,7 +77,7 @@ public class RechargeMoneyGUI extends NetManagerGUI {
             else {
                 try {
                     User u = UserSession.getSession().getUser();
-                    new UserDAO().chargeMoney(this, Integer.parseInt(chargeAmount.getText()), username);
+                    new UserDAO().chargeMoney( Integer.parseInt(chargeAmount.getText()), username);
                     OrderDAO.saveOrder(u,new ChargeOrder(u.getUserId(),Long.parseLong(chargeAmount.getText()),LocalDateTime.now(),LocalDate.now(),LocalTime.now(),true));
                 }
                 catch (SQLException ex) {

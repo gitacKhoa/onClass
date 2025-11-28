@@ -7,7 +7,12 @@ package org.example.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import static java.sql.Types.VARCHAR;
 import java.util.ArrayList;
+import java.util.List;
+import org.example.model.ChargeOrder;
+import org.example.model.FoodOrder;
 import org.example.model.Product;
 import org.example.util.DatabaseConnection;
 
@@ -83,13 +88,23 @@ public class ProductDAO {
         return false;
     }
     
-    public static boolean updateProductBenefit(String benefitToAdd, int productId) {
-        String sql = "UPDATE product SET product_benefit = product_benefit + ? WHERE product_id = ?";
+    public static boolean updateProductBenefit(Object o) {
+        String sql = "UPDATE product SET product_benefit = product_benefit + ?, product_buytime = product_buytime + ? WHERE product_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            if ( o instanceof ChargeOrder) {
+                ChargeOrder ord = (ChargeOrder) o;
+                stmt.setLong(1, ord.getTotalMoney() ); // bigint
+                stmt.setInt(2, 1);
+                stmt.setInt(3, 1);
+            }
+            else if ( o instanceof FoodOrder) {
+                FoodOrder ord = (FoodOrder) o;
+                stmt.setLong(1, ord.getTotalMoney()); // bigint
+                stmt.setInt(2, ord.getOrderAmount() );
+                stmt.setInt(3, ord.getOrderProduct().getProduct_id());
+            }
 
-            stmt.setLong(1, Long.parseLong(benefitToAdd)); // bigint
-            stmt.setInt(2, productId);
 
             return stmt.executeUpdate() > 0;
 
@@ -97,6 +112,64 @@ public class ProductDAO {
             e.printStackTrace();
             return false;
         }
+    }
+    public List<Product> searchProductByKeyword(String keyword) {
+    List<Product> list = new ArrayList<>();
+
+    String sql = """
+        SELECT product_id, product_name, product_cost, product_buytime, product_benefit, product_image
+        FROM product
+        WHERE product_name LIKE ?
+    """;
+
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setString(1, "%" + keyword + "%");
+
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Product p = new Product();
+            p.setProduct_id(rs.getInt("product_id"));
+            p.setProduct_name(rs.getString("product_name"));
+            p.setProduct_cost(rs.getString("product_cost"));
+            p.setProduct_buytime(rs.getInt("product_buytime"));
+            p.setProduct_benefit(rs.getLong("product_benefit"));
+            p.setProduct_image(rs.getString("product_image"));
+
+            list.add(p);
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return list;
+}
+    
+    public boolean adjustProduct(String name, String cost, String imagePath, int id) {
+        String sql = """
+        UPDATE product
+        SET product_cost = ?, product_image = ?,
+        product_name = ? WHERE product_id = ?
+        """;
+
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            if ( cost == null ) {
+                ps.setNull(1,VARCHAR);
+            }
+            ps.setString(1, cost);
+            ps.setString(2, imagePath);
+            ps.setString(3, name);
+            ps.setInt(4,id);
+            int rows = ps.executeUpdate();
+            return rows > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 }
 
