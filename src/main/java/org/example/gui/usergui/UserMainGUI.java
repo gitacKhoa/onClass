@@ -24,7 +24,11 @@ public class UserMainGUI extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UserMainGUI.class.getName());
     DefaultListModel<Product> model = new DefaultListModel<>();
     DefaultListModel<Object> orderModel = new DefaultListModel<>();
+    
+    //LƯU DỮ LIỆU LỊCH SỬ ĐĂNG NHẬP (LIST MODEL)
     DefaultListModel<Object> logModel = new DefaultListModel<>();
+    
+    
     CountThread count;
     /**
      * Creates new form UserMainGUI
@@ -39,7 +43,9 @@ public class UserMainGUI extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
         //
+        //
         //TẠO LUỒNG TÍNH THỜI GIAN VÀ TRỪ TIỀN
+        //
         //
         count = new CountThread();
         count.start();
@@ -374,11 +380,16 @@ public class UserMainGUI extends javax.swing.JFrame {
             System.out.println("hi");
         }
     }
-    
+    //
+    //
+    // TRUYỀN DỮ LIỆU LỊCH SỬ ĐĂNG NHẬP VÀO GIAO DIỆN
+  
     public void fillLogList () {
         logModel.clear();
+        //DUYỆT DANH SÁCH KẾT QUẢ VÀ TRUYỀN VÀO MODEL
         for (Object o : UserSession.getSessionByUserId(UserSession.getSession().getUser().getUserId())) {
             logModel.addElement(o);
+            
             System.out.println("bye");
         }
     }
@@ -392,8 +403,9 @@ public class UserMainGUI extends javax.swing.JFrame {
                 long timeLeft;
                 UserDAO user = new UserDAO();
                 while (user.getUserBalance(titleName)>0) {
+                    //chạy theo chu kì 1s
                     Thread.sleep(1000);                                                             //DỪNG THREAD 1 GIÂY
-                    user.addUseTime(UserSession.getSession().getUser().getUsername());           //THÊM THỜI GIAN SỬ DỤNG VÀO DB
+                    user.addUseTime(UserSession.getSession().getUser().getUsername());           //THÊM THỜI GIAN SỬ DỤNG CỦA NGƯỜI DÙNG VÀO DB
                     user.adjustBalance(UserSession.getSession().getUser().getUsername(), -10 );  //TRỪ TIỀN TÀI KHOẢN MỖI GIÂY
                     timeLeft = user.getUserBalance(titleName)/600;                               
                     lblTime.setText(String.valueOf(timeLeft)+" Phút");                              //HIỂN THỊ THÔNG SỐ THỜI GIAN VÀ TIỀN

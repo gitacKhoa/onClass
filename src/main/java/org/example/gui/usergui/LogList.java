@@ -1,5 +1,6 @@
 package org.example.gui.usergui;
 
+import org.example.gui.usergui.LogItem;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.DefaultListCellRenderer;

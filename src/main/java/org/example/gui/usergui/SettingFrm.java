@@ -168,9 +168,7 @@ public class SettingFrm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLuuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLuuActionPerformed
-        if ( txtEmail.getText().equals("") || txtSdt.getText().equals("")) {
-            dispose();
-        }
+
         User u = new User();
         u.setEmail(txtEmail.getText());
         u.setPhone(txtSdt.getText());

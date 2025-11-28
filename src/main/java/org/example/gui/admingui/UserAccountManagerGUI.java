@@ -194,7 +194,7 @@ public class UserAccountManagerGUI {
         //
 
         xemChiTiet.addActionListener(e->{
-            new UserAccountDetailGUI("Chi tiết người dùng", 700, 420, danhSach.getSelectedValue());
+            new UserAccountDetailGUI("Chi tiết người dùng", 700, 600, danhSach.getSelectedValue());
         });
 
         //

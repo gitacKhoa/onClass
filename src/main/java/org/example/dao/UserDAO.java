@@ -338,14 +338,11 @@ public class UserDAO {
         UPDATE users
         SET  email = ?, phone_number = ?
         WHERE user_id = ?
-    """;
+        """;
 
         try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-
-
-
-            // email
-            if (user.getEmail() == null) {
+            // KIỂM TRA NGƯỜI DÙNG CO
+            if (user.getEmail() == null) { //NẾU EMAIL
                 ps.setNull(1, VARCHAR);
             } else {
                 ps.setString(1, user.getEmail());
@@ -367,19 +364,23 @@ public class UserDAO {
             return false;
         }
     }
+    // THỰC THI ĐỔI MẬT KHẨU BẰNG CÁCH KẾT NỐI VỚI MYSQL
+    // TRẢ VỀ ĐÚNG/SAI (THÀNH CÔNG/THẤT BẠI)
     public boolean updatePassword(int userId, String password) {
         String sql = """
         UPDATE users
         SET password_hash = ?
         WHERE user_id = ?
-    """;
+        """;
 
         try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-
+            //TRUYỀN DỮ LIỆU VÀO CÂU LỆNH - KHỚP LỆNH
             ps.setString(1, password);
             ps.setInt(2, userId);
-            return ps.executeUpdate() > 0;
-
+            
+            //THỰC THI CÂU LỆNH TRONG MYSQL
+            return (ps.executeUpdate() > 0);  //ps.executeUpdate() SẼ  TRẢ VỀ 1 DỮ LIỆU ĐÚNG/SAI (THÀNH CÔNG/THAATSBAIJ)
+                    
         } catch (SQLException e) {
             e.printStackTrace();
             return false;

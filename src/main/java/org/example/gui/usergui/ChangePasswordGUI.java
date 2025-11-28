@@ -111,10 +111,13 @@ public class ChangePasswordGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDoiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDoiActionPerformed
-        String mkcu= new String(txtMKcu.getPassword());
+        //mat khau cu
+        String mkcu = new String(txtMKcu.getPassword());
+        //bien luu mat khau moi
         String mkmoi = new String(txtMK.getPassword());
+        //bien luu xac nhan mat khau
         String xnmk = new String(txtXNMK.getPassword());
-        User u = UserSession.getSession().getUser();
+        User u = UserSession.getSession().getUser(); // TRUYỀN DỮ LIỆU TỪ LỚP PHIÊN VÀO ĐỐI TƯỢNG u
         if ( !(mkcu.equals(u.getPassword()))) {
             JOptionPane.showMessageDialog(null, "Mật khẩu cũ không trùng khớp");
             return;

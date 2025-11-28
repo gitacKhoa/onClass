@@ -161,8 +161,10 @@ public class UserSession {
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, userId);
 
-            ResultSet rs = stmt.executeQuery();
+            ResultSet rs = stmt.executeQuery(); //stmt.executeQuery() --> trả về danh sách kết quả mà SQL tìm thấy
+            
 
+            //TRUYỀN DỮ LIỆU TỪ RESULT SET (MYSQL) VÀO LIST (JAVA)
             while (rs.next()) {
                 int sessionId = rs.getInt("session_id");
                 LocalDateTime start = rs.getTimestamp("session_start").toLocalDateTime();
